@@ -60,13 +60,16 @@ import BScroll from 'better-scroll'
 export default {
   data () {
     return {
-      balls: [{show: false},
+      balls: [
         {show: false},
         {show: false},
         {show: false},
         {show: false},
-        {show: false}],
-      fold: true
+        {show: false},
+        {show: false}
+      ],
+      fold: true,
+      dropBalls: []
     }
   },
   props: {
@@ -136,86 +139,40 @@ export default {
   components: {
     cartcontrol
   },
-  /* transitions: {
-    drop: {
-      beforeEnter (el) {
-        let count = this.balls.length
-        while (count--) {
-          let ball = this.balls[count]
-          if (ball.show) {
-            let rect = ball.el.getBoundingClientRect()
-            let x = rect.left - 32
-            let y = -(window.innerHeight - rect.top - 22)
-            el.style.display = ''
-            el.style.webkitTransform = `translate3d(0,${y}px,0)`
-            el.style.transform = `translate3d(0,${y}px,0)`
-            // let inner = el.getElementsByClassName('inner-hook')[0]
-            el.style.webkitTransform = `translate3d(${x}px,0,0)`
-            el.style.transform = `translate3d(${x}px,0,0)`
-          }
-        }
-      },
-      enter (el) {
-        // eslint-disable-next-line
-        let rf = el.offsetHeight
-        this.$nextTick(() => {
-          el.style.webkitTransform = 'translate3d(0,0,0)'
-          el.style.transform = 'translate3d(0,0,0)'
-          // let inner = el.getElementsByClassName('inner-hook')[0]
-          el.style.webkitTransform = 'translate3d(0,0,0)'
-          el.style.transform = 'translate3d(0,0,0)'
-        })
-      },
-      afterEnter (el) {
-        let ball = this.dropBalls.shift()
-        if (ball) {
-          el.style.display = 'none'
-        }
-      }
-    }
-  }, */
   methods: {
     beforeEnter (el) {
-      let count = this.balls.length
+      let count = this.dropBalls.length
       while (count--) {
-        let ball = this.balls[count]
+        let ball = this.dropBalls[count]
         if (ball.show) {
           let rect = ball.target.getBoundingClientRect()
-          let x = Math.round(rect.left - 32)
-          let y = -Math.round(window.innerHeight - rect.top - 22)
-          el.style.display = ''
+          let x = rect.left - 32
+          let y = -(window.innerHeight - rect.top - 22)
           el.style.webkitTransform = `translate3d(0,${y}px,0)`
           el.style.transform = `translate3d(0,${y}px,0)`
           let inner = el.getElementsByClassName('inner-hook')[0]
           inner.style.webkitTransform = `translate3d(${x}px,0,0)`
           inner.style.transform = `translate3d(${x}px,0,0)`
-          // inner.style.opacity = '0'
-          // el.style.transition = 'all 0s'
-          // inner.style.transition = 'all 0s'
+          return
         }
       }
     },
     enter (el) {
-      let inner = el.getElementsByClassName('inner-hook')[0]
-      inner.style.opacity = '1'
+      /* eslint-disable */
+      let rf = el.offsetHeight
+
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0,0,0)'
+        el.style.transform = 'translate3d(0,0,0)'
+        let inner = el.getElementsByClassName('inner-hook')[0]
+        inner.style.webkitTransform = 'translate3d(0,0,0)'
+        inner.style.transform = 'translate3d(0,0,0)'
+      })
     },
     afterEnter (el) {
-      el.style.transition = 'all 0.5s ease-in'
-      el.style.transform = 'translate3d(0,0,0)'
-      el.style.webkitTransform = 'translate3d(0,0,0)'
-      let inner = el.getElementsByClassName('inner-hook')[0]
-      inner.style.transition = 'all 0.5s ease-out'
-      inner.style.webkitTransform = 'translate3d(0,0,0)'
-      inner.style.transform = 'translate3d(0,0,0)'
-      for (let i = 0; i < this.balls.length; i++) {
-        let ball = this.balls[i]
-        if (ball.show) {
-          setTimeout(() => {
-            el.style.display = 'none'
-            ball.show = false
-            return 0
-          }, 500)
-        }
+      let ball = this.dropBalls.shift()
+      if (ball) {
+        ball.show = false
       }
     },
     drop (target) {
@@ -224,7 +181,7 @@ export default {
         if (!ball.show) {
           ball.show = true
           ball.target = target
-          // this.dropBalls.push(ball)
+          this.dropBalls.push(ball)
           return
         }
       }
@@ -250,6 +207,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="stylus">
@@ -267,9 +225,10 @@ export default {
     display: flex
     background: #141d17
     font-size: 0
+    position: relative
+    z-index: 2
     .content-left
       flex: 1
-      z-index: 50
       .logo-wrapper
         display: inline-block
         position: relative
@@ -313,6 +272,7 @@ export default {
               color:#fff
       .price
         display: inline-block
+        position: relative
         vertical-align: top
         margin-top: 12px
         line-height: 24px
@@ -335,7 +295,6 @@ export default {
     .content-right
       flex: 0 0 105px
       width: 105px
-      z-index: 50
       .pay
         height: 48px
         line-height: 48px
@@ -364,18 +323,19 @@ export default {
         height: 100%
         background: rgb(0, 160, 220)
         border-radius: 50%
+        transition: all 3s ease-out
       &.drop-enter
-        opacity: 0
+        opacity: 1
       &.drop-enter-active
-        transition: all 7s linear
+        transition: all 3s ease-in
       &.drop-enter-to
         opacity: 1
-        transform :translate3d(0, 0, 0)
+
   .shopcart-list
     position: absolute
     top: 0
     left: 0
-    z-index: 45
+    z-index: 1
     width: 100%
     transform: translate3d(0, -100%, 0)
     &.v-enter-active,&.v-leave-active
@@ -429,7 +389,7 @@ export default {
     left: 0
     width: 100%
     height: 100%
-    z-index: 40
+    // z-index: 1
     opacity: 1
     background: rgba(7, 17, 27, 0.6)
     backdrop-fliter: blur(10px)

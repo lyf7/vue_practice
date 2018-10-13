@@ -2,18 +2,19 @@
 <div id="app" >
     <v-header :seller="seller"></v-header>
     <div class="tab border-1px">
-    <div class="tab-item"><router-link to='/goods'>商品</router-link></div>
+    <div class="tab-item"><router-link to='/goods' >商品</router-link></div>
     <div class="tab-item"><router-link to='/ratings'>评论</router-link></div>
     <div class="tab-item"><router-link to='/seller'>商家</router-link></div>
     </div>
 <keep-alive>
-  <router-view :seller="seller"></router-view>
+  <router-view :seller="seller" ></router-view>
 </keep-alive>
 </div>
 </template>
 
 <script>
 import header from './components/header/header.vue'
+import goods from './components/goods/goods.vue'
 import {urlParse} from './common/js/utils'
 const ERR_OK = 0
 
@@ -36,7 +37,9 @@ export default {
       }
     })
   },
-  components: { 'v-header': header }
+  components: {
+    'v-header': header,
+    'goods': goods }
 }
 </script>
 
@@ -59,5 +62,5 @@ export default {
           font-size: 14px
           color: rgb(77, 85, 93)
           &.router-link-active
-            color: rgb(240, 20, 20)
+            color: #00a0dc
 </style>

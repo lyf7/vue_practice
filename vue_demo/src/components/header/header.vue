@@ -135,6 +135,7 @@ export default {
           line-height: 12px
           font-size: 12px
         .support
+          font-size: 0
           .icon
             display: inline-block
             vertical-align: top
@@ -153,9 +154,9 @@ export default {
               bg-image('invoice_1')
             &.special
               bg-image('special_1')
-            &.text
-              line-height: 12px
-              font-size: 10px
+          .text
+            line-height: 12px
+            font-size: 12px
       .support-count
         position: absolute
         right: 12px
@@ -176,7 +177,7 @@ export default {
     .bulletin-wrapper
       position: relative
       height: 28px
-      line-height: 28px
+      font-size: 0
       padding: 0 22px 0 12px
       white-space: nowrap
       overflow: hidden
@@ -185,19 +186,23 @@ export default {
       .bulletin-title
         display: inline-block
         width: 22px
-        height: 12px
+        height: 28px
+        // vertical-align: top
         bg-image('bulletin')
-        background-size: 22px 12px
+        background-size: 22px 14px
         background-repeat: no-repeat
+        background-position: center center
       .bulletin-text
         font-size: 10px
+        line-height: 28px
+        vertical-align: bottom
         font-weight: 200
         margin: 0 4px
       .icon-keyboard_arrow_right
         position: absolute
         font-size: 10px
         right: 12px
-        top: 8px
+        top: 9px
 
     .background
       position: absolute

@@ -19,7 +19,7 @@
         <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
       </div>
       <div class="cartcontrol-wrapper">
-        <cartcontrol :food="food"></cartcontrol>
+        <cartcontrol :food="food" v-on:cartAdd="addCart"></cartcontrol>
       </div>
       <transition>
       <div @click="addFirst(food,$event)" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
@@ -127,6 +127,9 @@ export default {
       }
       this.$emit('cartAdd', event.target)
       Vue.set(this.food, 'count', 1)
+    },
+    addCart (target) {
+      this.$emit('cartAdd', target)
     }
   },
   filters: {
